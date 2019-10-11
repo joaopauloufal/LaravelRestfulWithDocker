@@ -13,6 +13,8 @@ services:
         depends_on:
             - db
             - redis
+        links:
+            - db
 
     nginx:
         build: .docker/nginx
