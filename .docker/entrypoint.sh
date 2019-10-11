@@ -7,7 +7,8 @@ cp .env.testing.example .env.testing
 composer install
 php artisan key:generate
 php artisan migrate --seed
-chown -R www-data:1001 /var/www/storage /var/www/public /var/www/app
+php artisan passport:install
+chown -R www-data:1000 /var/www/storage /var/www/public /var/www/app
 chmod -R 775 /var/www/storage /var/www/public /var/www/app
 chmod -R 777 /var/www/bootstrap/cache
 php-fpm
