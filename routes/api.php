@@ -19,5 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function(){
     Route::get('/products', 'ProductController@index');
-    Route::post('/products/store', 'ProductController@store');
+    Route::post('/products', 'ProductController@store');
+    Route::put('/products/{product}', 'ProductController@update');
+    Route::get('/products/{product}', 'ProductController@show');
+    Route::delete('/products/{product}', 'ProductController@destroy');
 });
