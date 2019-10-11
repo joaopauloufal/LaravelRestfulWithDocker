@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+
+    app:
+        build: .
+        container_name: laravel-restful-app
+        entrypoint: dockerize -wait tcp://db:3306 -timeout 40s ./.docker/entrypoint.sh
+        volumes:
+            - .:/var/www
+        networks:
+            - app-network
+        depends_on:
+            - db
+            - redis
+
+    nginx:
+        build: .docker/nginx
+        container_name: laravel-restful-nginx
+        restart: always
+        tty: true
+        ports:
+            - "8000:80"
+        volumes:
+            - .:/var/www
+        networks:
+            - app-network
+        depends_on:
+            - app
+
+    db:
+        image: mysql:5.7
+        command: --innodb-use-native-aio=0
+        container_name: laravel-restful-db
+        restart: always
+        tty: true
+        ports:
+            - "33006:3306"
+        volumes:
+            - ./.docker/dbdata:/var/lib/mysql
+            - ./.docker/mysql:/docker-entrypoint-initdb.d
+        environment:
+            # - MYSQL_DATABASE=code_micro_videos
+            - MYSQL_ROOT_PASSWORD=123456
+            - MYSQL_USER=root
+        networks:
+            - app-network
+
+    redis:
+        image: redis:alpine
+        container_name: laravel-restful-redis
+        expose:
+            - 6379
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge

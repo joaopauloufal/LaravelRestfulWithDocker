@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS laravel_restful;
+CREATE DATABASE IF NOT EXISTS laravel_restful_test;
