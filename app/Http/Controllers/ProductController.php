@@ -9,12 +9,18 @@ class ProductController extends Controller
 {
     public function index(){
 
-        return Product::all();
+        $minutes = \Carbon\Carbon::now()->addMinutes(10);
+        $products = \Cache::remember('api::products', $minutes, function () {
+            return Product::all();
+        });
+
+        return $products;
 
     }
 
     public function store(Request $request){
 
+        \Cache::forget('api::products');
         $data = $request->all();
         $data['user_id'] = \Auth::user()->id;
         return Product::create($data);
